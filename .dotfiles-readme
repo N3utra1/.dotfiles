@@ -1,0 +1,26 @@
+
+###### config documentation
+
+
+
+##### must do-s on new systems
+
+[setup keys]
+
+$: git clone git@github.com:N3utra1/.dotfiles.git
+$: config config --local status.showUntrackedFiles 
+this is so .dotfiles (git repo) behave as expected
+
+
+##### documentation
+
+
+
+#### config file (.dotfiles repo) setup
+
+$: git init --bare $HOME/dotfiles 
+$: alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add this alias to .bashrc) 
+relaod bash
+$: config config --local status.showUntrackedFiles no 
+
+Basic usage example: config add /path/to/file config commit -m "A short message" config push
