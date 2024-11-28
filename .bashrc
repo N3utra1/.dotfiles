@@ -111,4 +111,12 @@ shopt -s expand_aliases
 
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
+
+
+## custom config
+
 alias config='/usr/bin/git --git-dir=/home/zeta/.dotfiles/ --work-tree=/home/zeta'
+alias vboxclipboard='VBoxClient --clipboard'
+source ~/.bashrc_custom
+
+

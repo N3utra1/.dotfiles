@@ -1,0 +1,3 @@
+# this is ran at the end of .bashrc_custom and is different of each machine
+
+alias vboxclipboard='VBoxClient --clipboard'

@@ -1,0 +1,13 @@
+
+# custom configuration regardless of machine or OS
+
+alias config='/usr/bin/git --git-dir=/home/zeta/.dotfiles/ --work-tree=/home/zeta' 
+
+
+
+
+
+
+# run setup script for this machine if exists
+
+alias vboxclipboard='VBoxClient --clipboard' 
