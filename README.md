@@ -10,4 +10,5 @@ config add /path/to/file
 config commit -m "A short message"
 config push
 
-To install, simply clone the directory in ~
+TO INSTALL:
+curl https://raw.githubusercontent.com/N3utra1/.dotfiles/refs/heads/init/dotfiles-guide.sh | /bin/bash
