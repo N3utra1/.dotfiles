@@ -1,122 +1,306 @@
-#
-# ~/.bashrc
-#
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-colors() {
-	local fgc bgc vals seq0
-
-	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
-	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
-	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
-	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
-
-	# foreground colors
-	for fgc in {30..37}; do
-		# background colors
-		for bgc in {40..47}; do
-			fgc=${fgc#37} # white
-			bgc=${bgc#40} # black
-
-			vals="${fgc:+$fgc;}${bgc}"
-			vals=${vals%%;}
-
-			seq0="${vals:+\e[${vals}m}"
-			printf "  %-9s" "${seq0:-(default)}"
-			printf " ${seq0}TEXT\e[m"
-			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
-		done
-		echo; echo
-	done
-}
-
-[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
-
-# Change the window title of X terminals
-case ${TERM} in
-	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
-		PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
-		;;
-	screen*)
-		PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-		;;
+# Enable the subsequent settings only in interactive sessions
+case $- in
+  *i*) ;;
+    *) return;;
 esac
 
-use_color=true
+# Path to your oh-my-bash installation.
+export OSH='/home/omega/.oh-my-bash'
 
-# Set colorful PS1 only on colorful terminals.
-# dircolors --print-database uses its own built-in database
-# instead of using /etc/DIR_COLORS.  Try to use the external file
-# first to take advantage of user additions.  Use internal bash
-# globbing instead of external grep binary.
-safe_term=${TERM//[^[:alnum:]]/?}   # sanitize TERM
-match_lhs=""
-[[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
-[[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
-[[ -z ${match_lhs}    ]] \
-	&& type -P dircolors >/dev/null \
-	&& match_lhs=$(dircolors --print-database)
-[[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-bash is loaded.
+OSH_THEME="font"
 
-if ${use_color} ; then
-	# Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
-	if type -P dircolors >/dev/null ; then
-		if [[ -f ~/.dir_colors ]] ; then
-			eval $(dircolors -b ~/.dir_colors)
-		elif [[ -f /etc/DIR_COLORS ]] ; then
-			eval $(dircolors -b /etc/DIR_COLORS)
-		fi
-	fi
+# Uncomment the following line to use case-sensitive completion.
+# OMB_CASE_SENSITIVE="true"
 
-	if [[ ${EUID} == 0 ]] ; then
-		PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
-	else
-		PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
-	fi
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# OMB_HYPHEN_SENSITIVE="false"
 
-	alias ls='ls --color=auto'
-	alias grep='grep --colour=auto'
-	alias egrep='egrep --colour=auto'
-	alias fgrep='fgrep --colour=auto'
-else
-	if [[ ${EUID} == 0 ]] ; then
-		# show root@ when we don't have colors
-		PS1='\u@\h \W \$ '
-	else
-		PS1='\u@\h \w \$ '
-	fi
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_OSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you don't want the repository to be considered dirty
+# if there are untracked files.
+# SCM_GIT_DISABLE_UNTRACKED_DIRTY="true"
+
+# Uncomment the following line if you want to completely ignore the presence
+# of untracked files in the repository.
+# SCM_GIT_IGNORE_UNTRACKED="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.  One of the following values can
+# be used to specify the timestamp format.
+# * 'mm/dd/yyyy'     # mm/dd/yyyy + time
+# * 'dd.mm.yyyy'     # dd.mm.yyyy + time
+# * 'yyyy-mm-dd'     # yyyy-mm-dd + time
+# * '[mm/dd/yyyy]'   # [mm/dd/yyyy] + [time] with colors
+# * '[dd.mm.yyyy]'   # [dd.mm.yyyy] + [time] with colors
+# * '[yyyy-mm-dd]'   # [yyyy-mm-dd] + [time] with colors
+# If not set, the default value is 'yyyy-mm-dd'.
+# HIST_STAMPS='yyyy-mm-dd'
+
+# Uncomment the following line if you do not want OMB to overwrite the existing
+# aliases by the default OMB aliases defined in lib/*.sh
+# OMB_DEFAULT_ALIASES="check"
+
+# Would you like to use another custom folder than $OSH/custom?
+# OSH_CUSTOM=/path/to/new-custom-folder
+
+# To disable the uses of "sudo" by oh-my-bash, please set "false" to
+# this variable.  The default behavior for the empty value is "true".
+OMB_USE_SUDO=true
+
+# To enable/disable display of Python virtualenv and condaenv
+OMB_PROMPT_SHOW_PYTHON_VENV=true  # enable
+# OMB_PROMPT_SHOW_PYTHON_VENV=false # disable
+
+# Which completions would you like to load? (completions can be found in ~/.oh-my-bash/completions/*)
+# Custom completions may be added to ~/.oh-my-bash/custom/completions/
+# Example format: completions=(ssh git bundler gem pip pip3)
+# Add wisely, as too many completions slow down shell startup.
+completions=(
+  git
+  composer
+  ssh
+)
+
+# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
+# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
+# Example format: aliases=(vagrant composer git-avh)
+# Add wisely, as too many aliases slow down shell startup.
+aliases=(
+  general
+)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  bashmarks
+)
+
+# Which plugins would you like to conditionally load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format:
+#  if [ "$DISPLAY" ] || [ "$SSH" ]; then
+#      plugins+=(tmux-autoattach)
+#  fi
+
+source "$OSH"/oh-my-bash.sh
+
+# User configuration
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-bash libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-bash
+# users are encouraged to define aliases within the OSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias bashconfig="mate ~/.bashrc"
+# alias ohmybash="mate ~/.oh-my-bash"
+#
+
+
+
+
+
+
+##################################################
+###	 My changes                            ###
+##################################################
+
+export EDITOR=vim
+export PATH="$HOME/.bin:$PATH"
+export UPDATE="sudo apt-get update -y"
+export UPGRADE="sudo apt-get upgrade"
+export SEARCH="sudo apt-cache search"
+export INSTALL="sudo apt-get install"
+export CLEAN="sudo apt autoremove && sudo apt clean"
+
+export phi="192.168.0.128"
+
+export JAVA_HOME=""
+
+##################################################
+###	QUICK COMMANDS 			       ###
+##################################################
+
+#Package Manager
+alias update=$UPDATE
+alias upgrade=$UPGRADE
+alias search=$SEARCH
+alias install=$INSTALLs
+alias clean=$clean
+
+#Power off, on and sleep
+alias sleep='systemctl suspend'
+alias poweroff='~/.bin/poweroffScript.sh'
+alias suspend='systemctl suspend'
+
+#Common alias
+alias bt='bluetoothctl'
+alias headphones='bluetoothctl connect AC:80:0A:59:09:88'
+alias r='ranger'
+alias rd='ranger'
+alias c='clear'
+    alias cl='clear'
+alias d='urxvt &'
+alias restartX='xrdb ~/.Xresources'
+alias rollback='git reset --hard HEAD'
+
+
+alias sl="ls"
+alias lsc="ls"
+alias slc="ls"
+alias s="ls"
+alias l="ls -l"
+alias la="ls -la"
+
+alias python="python3"
+
+
+##################################################
+###	QUICK MOVEMENT			       ###
+##################################################
+
+#moving up dirs
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+
+#uni dirs
+alias 6013='cd ~/Documents/University/COMP6013'
+alias 6018='cd ~/Documents/University/COMP6018'
+alias 6015='cd ~/Documents/University/COMP6015'
+alias 6031='cd ~/Documents/University/COMP6031'
+
+#useful dirs
+alias projects='cd ~/Documents/Projects'
+alias scratch='cd ~/Documents/Scratch'
+alias uni='cd ~/Documents/University'
+alias bin='cd ~/.bin'
+
+# dotfiles location
+alias bashrc='vim ~/.bashrc'
+alias i3conf='vim ~/.config/i3/config'
+alias doom='~/.emacs.d/bin/doom'
+alias x='vim ~/.Xresources'
+alias vimrc='vim ~/.vimrc'
+
+
+#Extracter function
+function extract {
+ if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+ else
+    if [ -f $1 ] ; then
+        # NAME=${1%.*}
+        # mkdir $NAME && cd $NAME
+        case $1 in
+          *.tar.bz2)   tar xvjf ./$1    ;;
+          *.tar.gz)    tar xvzf ./$1    ;;
+          *.tar.xz)    tar xvJf ./$1    ;;
+          *.lzma)      unlzma ./$1      ;;
+          *.bz2)       bunzip2 ./$1     ;;
+          *.rar)       unrar x -ad ./$1 ;;
+          *.gz)        gunzip ./$1      ;;
+          *.tar)       tar xvf ./$1     ;;
+          *.tbz2)      tar xvjf ./$1    ;;
+          *.tgz)       tar xvzf ./$1    ;;
+          *.zip)       unzip ./$1       ;;
+          *.Z)         uncompress ./$1  ;;
+          *.7z)        7z x ./$1        ;;
+          *.xz)        unxz ./$1        ;;
+          *.exe)       cabextract ./$1  ;;
+          *)           echo "extract: '$1' - unknown archive method" ;;
+        esac
+    else
+        echo "$1 - file does not exist"
+    fi
 fi
+}
 
-unset use_color safe_term match_lhs sh
-
-#alias cp="cp -i"                          # confirm before overwriting something
-#alias df='df -h'                          # human-readable sizes
-#alias free='free -m'                      # show sizes in MB
-#alias np='nano -w PKGBUILD'
-#alias more=less
-
-xhost +local:root > /dev/null 2>&1
-
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
-
-shopt -s expand_aliases
-
-# export QT_SELECT=4
-
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
+##################################################
 
 
-## custom config
 
-alias config='/usr/bin/git --git-dir=/home/zeta/.dotfiles/ --work-tree=/home/zeta'
-alias vboxclipboard='VBoxClient --clipboard'
-source ~/.bashrc_custom
+##################################################
+###	SCRIPT BINDS 			       ###
+##################################################
 
+alias print='print.sh'
+alias list='list.sh'
+alias layout1='~/.screenlayout/setup1.sh'
+alias layout2='~/.screenlayout/setup2.sh'
+alias layout3='~/.screenlayout/setup3.sh'
+alias layout4='~/.screenlayout/setup4.sh'
+
+alias topdf='soffice --headless --convert-to pdf'
+alias pyLocalServer='python3 -m http.server'
+alias http='browser-sync start --server -f -w'
+
+##################################################
+
+
+# WIP
+alias mext='&' #mount external drive
+
+##################################################
+###	SSH BINDS 			       ###
+##################################################
+
+alias phi='ssh phi@192.168.0.128'
+
+
+##################################################
+
+alias config='/usr/bin/git --git-dir=/home/omega/.dotfiles/ --work-tree=/home/omega'
+
+cal
+date
+tmux
 
