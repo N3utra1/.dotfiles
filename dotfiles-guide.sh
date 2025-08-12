@@ -1,26 +1,17 @@
 #!/bin/bash
-set -xe
+#set -xe
 
 # clone the repo into the .dotfiles directory
-# this will not overwrite you existing dotfiles!
-if [ ! -d ~/.dotfiles ] 
-    then
-    git clone --bare git@github.com:N3utra1/.dotfiles.git ~/.dotfiles
-fi
-
-if grep -q 'alias config=' ~/.bashrc; then
-    echo "Alias 'config' exists in .bashrc"
+#       exit 1 if error when cloning directory 
+#       exit 2 if directory (~/.dotfiles) already exists
+if [ ! -d ~/.dotfiles ]; then
+    git clone --bare git@github.com:N3utra1/.dotfiles.git ~/.dotfiles || echo "git clone failed" && exit 1
 else
-    echo "Alias 'reload' does not exist in .bashrc"
-    echo "Alias config='/usr/bin/git --git-dir=/home/zeta/.dotfiles/ --work-tree=/home/zeta'" >> ~./bashrc
+    echo "~/.dotfiles already exists!"
+    exit 2
 fi
 
+# this will not overwrite your existing dotfiles!
+CONFIG="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+$CONFIG checkout
 source ~/.bashrc
-echo "Type: "
-echo "$: config checkout -b <suitable-name> "
-echo "Now go use the config alias to add your files."
-echo "..."
-
-echo "Then, commit and push"
-echo "$: config commit '<suitable-message>' "
-
