@@ -1,0 +1,73 @@
+# ~/.config/shell/rc
+#
+# Interactive shell configuration shared across all machines.
+#
+# The distribution's ~/.bashrc stays untracked and machine-owned; it sources
+# this file via a single hook line installed by ~/.bin/dotfiles-bootstrap.sh.
+# Anything specific to one host (credentials, absolute paths, per-box tooling)
+# belongs in ~/.bashrc below that hook line, not here.
+#
+# Every external tool is guarded by a presence check so a freshly provisioned
+# machine gets a working shell before the tools are installed.
+
+# ---------------------------------------------------------------- dotfiles --
+# Manage the bare repository in $HOME. Defined here rather than in ~/.bashrc so
+# it survives a reinstall; see README.md for the bootstrap sequence that has to
+# run before this file is available.
+alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+
+# ------------------------------------------------------------------ editor --
+# Resolve nvim through PATH instead of hardcoding an install prefix, so a
+# newer build under ~/.local/bin takes precedence over a system package.
+if command -v nvim >/dev/null 2>&1; then
+  alias vim="nvim"
+  alias vvim="\vim"
+fi
+
+# ------------------------------------------------------------------- atuin --
+# Shell history. bash-preexec must be sourced before `atuin init bash`.
+[ -r "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+if command -v atuin >/dev/null 2>&1; then
+  [ -f ~/.bash-preexec.sh ] && . ~/.bash-preexec.sh
+  eval "$(atuin init bash)"
+fi
+
+# --------------------------------------------------------------------- nvm --
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+# ----------------------------------------------------------------- aliases --
+alias c="clear"
+alias r="ranger"
+
+alias ls="ls --color=auto"
+alias sl="ls"
+alias lsc="ls"
+alias slc="ls"
+alias s="ls"
+alias l="ls -l"
+alias la="ls -la"
+alias ll="ls -la"
+
+alias bashrc="vim ~/.bashrc"
+alias reload="source ~/.bashrc"
+alias vimrc="vim ~/.vimrc"
+alias bin="vim ~/.bin"
+alias scripts="vim ~/.bin"
+
+alias history="history | less -i +G"
+alias hhistory="history"
+
+alias gitlog="git log --all --decorate --graph"
+
+# Neovim leaves swap files here after a crash; open the directory to clear them.
+alias swaps="ranger ~/.local/state/nvim/swap/"
+alias swap="swaps"
+
+alias tf="terraform"
+alias epwhich="aws sts get-caller-identity"
+alias awslogin="aws sso login --sso-session msc --no-browser --use-device-code"
+
+alias whatsmyip="curl https://ipinfo.io/ip && echo ''"
+alias weather="curl wttr.in/Wantage"

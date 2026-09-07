@@ -1,0 +1,18 @@
+# ~/.config/shell/profile
+#
+# Login-shell environment shared across all machines.
+#
+# The distribution's login file (~/.bash_profile, ~/.bash_login or ~/.profile,
+# whichever bash actually reads on this system) stays untracked and sources
+# this file via a hook line installed by ~/.bin/dotfiles-bootstrap.sh.
+#
+# Exports only. This runs after ~/.bashrc on a login shell, because the Debian
+# ~/.profile sources ~/.bashrc partway through, so nothing in
+# ~/.config/shell/rc may depend on a variable set here.
+
+# Default region for the AWS CLI; profiles and credentials stay out of the repo.
+export AWS_REGION="eu-west-2"
+
+# Adds ~/.atuin/bin to PATH. Also guarded in ~/.config/shell/rc, because a
+# non-login interactive shell reads only ~/.bashrc.
+[ -r "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
