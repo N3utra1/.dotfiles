@@ -10,6 +10,19 @@
 # Every external tool is guarded by a presence check so a freshly provisioned
 # machine gets a working shell before the tools are installed.
 
+# ------------------------------------------------------------ session bus --
+# pam_systemd normally exports XDG_RUNTIME_DIR and DBUS_SESSION_BUS_ADDRESS at
+# login, but shells started outside a PAM login (RDP and some SSH paths) never
+# receive them, which breaks systemctl --user, notify-send and anything else
+# needing the session bus. Fill them in only when the runtime directory and the
+# socket actually exist, and never overwrite a value that is already set.
+if [ -z "${XDG_RUNTIME_DIR:-}" ] && [ -d "/run/user/$(id -u)" ]; then
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
+if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ] && [ -S "${XDG_RUNTIME_DIR:-/nonexistent}/bus" ]; then
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+fi
+
 # ---------------------------------------------------------------- dotfiles --
 # Manage the bare repository in $HOME. Defined here rather than in ~/.bashrc so
 # it survives a reinstall; see README.md for the bootstrap sequence that has to
