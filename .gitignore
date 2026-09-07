@@ -1,0 +1,76 @@
+# This repository is a bare git repo whose work tree is $HOME, so an accidental
+# `config add .` would sweep in everything. Untracked files are hidden by
+# status.showUntrackedFiles=no; this list is the second line of defence for
+# paths that must never be committed.
+
+# Credentials and keys
+.aws/
+.gnupg/
+.ssh/
+.kube/
+.docker/
+.git-credentials
+credentials.bak
+*.pem
+*.key
+*.ovpn
+
+# Scripts that export AWS access keys inline; the machine that needs them keeps
+# its own copy outside the repository.
+.bin/ep1.sh
+.bin/ep2.sh
+
+# Tool state and history, not configuration
+.atuin/
+.claude.json
+.bash_history
+.bash_history-*.tmp
+.lesshst
+.xsession-errors*
+
+# Backups taken when splitting the shell configuration
+.bashrc.pre-split
+.profile.pre-split
+
+# Owned by the distribution and carrying this machine's settings. They are
+# hooked into the tracked fragments by ~/.bin/dotfiles-bootstrap.sh rather than
+# tracked, so keep them out of an accidental `config add -A`.
+.bashrc
+.profile
+.bash_profile
+.bash_login
+
+# Superseded by ~/.config/shell/rc; recoverable from history at 26ab5a1^
+.bashrc_custom
+.bashrc_startup
+.dotfiles-readme
+
+# Caches, package trees and runtime state. Nothing here is configuration, and
+# some of it runs to hundreds of thousands of files, so an accidental
+# `config add -A` would otherwise take the whole home directory.
+.cache/
+.npm/
+.nvm/
+.local/
+.mozilla/
+.dotnet/
+.docker/
+.ansible/
+.cdk/
+.gemini/
+.codeium/
+.cline/
+.claude/
+snap/
+node_modules/
+Desktop/
+Documents/
+Downloads/
+Music/
+Pictures/
+Public/
+Templates/
+Videos/
+Projects/
+Software/
+dist/
