@@ -38,6 +38,11 @@ exec_always --no-startup-id ~/.bin/load-xresources.sh
 # new version is the one in effect.
 exec_always --no-startup-id ~/.bin/i3-build-config.sh --restart
 
+# Wallpaper, tracked next to this file so every machine has it. exec_always so
+# it is set again after a restart. A host file can run feh again with another
+# image; the later one wins.
+exec_always --no-startup-id feh --no-fehbg --bg-scale ~/.config/i3/wallpaper.png
+
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status

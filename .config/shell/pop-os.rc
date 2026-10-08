@@ -119,6 +119,15 @@ alias figma='ssh figma@figma'
 
 [ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+# oh-my-bash evals `history -a` before every prompt, and eval expands aliases,
+# so the shared `history` alias (history | less) opened the pager each time a
+# prompt was drawn. Point its hook at the builtin instead.
+for i in "${!_omb_util_prompt_command[@]}"; do
+  [[ ${_omb_util_prompt_command[i]} == 'history -a' ]] &&
+    _omb_util_prompt_command[i]='builtin history -a'
+done
+unset i
+
 # Runs on every interactive shell.
 cal
 date

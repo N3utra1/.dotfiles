@@ -49,8 +49,10 @@ URxvt.internalBorder: 9
 URxvt*fading: 10
 URxvt*fadeColor: #000000
 
-! Pseudo-transparency: the wallpaper shows through the terminal background,
-! darkened to 40% of its brightness. Needs no compositor, but does need a
-! wallpaper set on the root window, which pop-os.conf does with feh.
+! Pseudo-transparency: the wallpaper shows through the terminal background.
+! shading is the brightness it is shown at: 100 is undimmed, lower is darker.
+! The shared wallpaper is nearly black already, so it needs no dimming to keep
+! text readable. Needs no compositor, but does need a wallpaper set on the root
+! window, which ~/.config/i3/config.base does with feh.
 URxvt*transparent: true
-URxvt*shading: 40
+URxvt*shading: 100
