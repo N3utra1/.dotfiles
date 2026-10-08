@@ -4,8 +4,9 @@
 #
 # The distribution's ~/.bashrc stays untracked and machine-owned; it sources
 # this file via a single hook line installed by ~/.bin/dotfiles-bootstrap.sh.
-# Anything specific to one host (credentials, absolute paths, per-box tooling)
-# belongs in ~/.bashrc below that hook line, not here.
+# Anything specific to one host (absolute paths, per-box tooling, startup
+# commands) belongs in ~/.config/shell/<hostname>.rc, sourced at the end of this
+# file. Secrets are not tracked at all and stay in ~/.bashrc or ~/.bin.
 #
 # Every external tool is guarded by a presence check so a freshly provisioned
 # machine gets a working shell before the tools are installed.
@@ -71,3 +72,12 @@ alias awslogin="aws sso login --sso-session msc --no-browser --use-device-code"
 
 alias whatsmyip="curl https://ipinfo.io/ip && echo ''"
 alias weather="curl wttr.in/Wantage"
+
+# ---------------------------------------------------------------- per host --
+# Settings for one machine live in ~/.config/shell/<hostname>.rc, tracked next
+# to this file so every machine's configuration is readable from any checkout.
+# Sourced last so a host can override anything above. A machine with no file of
+# its own just gets the shared configuration.
+host_rc="$HOME/.config/shell/$(hostname -s).rc"
+[ -r "$host_rc" ] && . "$host_rc"
+unset host_rc

@@ -7,8 +7,7 @@ Configuration for my machines, kept in a bare git repository whose work tree is
 
 The distribution owns `~/.bashrc` and the login file (`~/.bash_profile`,
 `~/.bash_login` or `~/.profile`, depending on the distribution). Those are never
-tracked: replacing them means fighting whatever each distribution ships, and
-they are the natural home for settings that apply to one machine only.
+tracked: replacing them means fighting whatever each distribution ships.
 
 Instead, each gets one appended hook line that sources a tracked fragment:
 
@@ -17,9 +16,26 @@ Instead, each gets one appended hook line that sources a tracked fragment:
 | `~/.bashrc`              | `~/.config/shell/rc` — interactive settings, aliases, tool init |
 | login file              | `~/.config/shell/profile` — exported environment |
 
-Machine-specific settings go directly into the untracked file, below the hook
-line, where they can override the shared fragment. Nothing outside
-`~/.config/shell` needs to know which distribution this is.
+Nothing outside `~/.config/shell` needs to know which distribution this is.
+
+## Per-machine settings
+
+Settings for one machine are tracked too, in files named after `hostname -s`,
+so every machine's configuration can be read and edited from any checkout. Only
+the file matching the current host is loaded, after the shared one, so it can
+override it. A machine with no file of its own gets the shared configuration.
+
+| Shared                     | Per machine                          | Loaded by |
+| -------------------------- | ------------------------------------ | --------- |
+| `~/.config/shell/rc`       | `~/.config/shell/<hostname>.rc`      | the end of `~/.config/shell/rc` |
+| `~/.config/X11/Xresources` | `~/.config/X11/<hostname>.Xresources` | `~/.bin/load-xresources.sh`, run by the i3 config |
+
+`~/.Xresources` is not used. To set up a new machine, create its two files and
+`config add` them; untracked files are hidden from `config status`, so a new
+host file is easy to forget.
+
+These files are pushed with everything else, so secrets still go in the
+untracked `~/.bashrc` or in ignored scripts under `~/.bin`.
 
 ## New machine
 

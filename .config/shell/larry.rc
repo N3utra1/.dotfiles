@@ -1,0 +1,49 @@
+# ~/.config/shell/larry.rc
+#
+# Interactive shell configuration for the host "larry" only (EC2 dev box,
+# reached over ssh and xrdp). Sourced at the end of ~/.config/shell/rc when
+# `hostname -s` is larry, so anything here overrides the shared settings.
+#
+# Tracked so it is readable from every machine, which means no secrets: the
+# scripts that export access keys stay untracked under ~/.bin.
+
+# AWS credentials for the two dev accounts. ~/.bin/ep1.sh and ~/.bin/ep2.sh
+# export access keys inline and are excluded from the repository.
+alias ep1="source ~/.bin/ep1.sh && aws sts get-caller-identity"
+alias ep2="source ~/.bin/ep2.sh && aws sts get-caller-identity"
+alias dns="source ~/.bin/ep1.sh && source ~/.bin/list-public-dns.sh"
+
+alias chaaps-war="ep2 && /bin/bash ~/.bin/start_chaaps_war.sh"
+alias chaaps-dev="chaaps-war"
+alias update-chaaps-war="/bin/bash ~/.bin/update_chaaps_war.sh"
+
+# Stops this dev box (EC2 StopInstances) when asked for by name. This used to
+# shadow the exit builtin, but an aliased exit fires from any sourced script or
+# closed shell, so the box went down without anyone asking.
+alias shutdown="source ~/.bin/ep1.sh && source ~/.bin/shutdown_dev.sh"
+
+alias msc-cloud="sudo openvpn --config /home/will/Documents/msc-cloud.ovpn \
+  --script-security 2 \
+  --up /home/will/Documents/openvpn-resolved-up.sh --up-restart \
+  --down /home/will/Documents/openvpn-resolved-down.sh --down-pre"
+
+alias ii="gnome-terminal --working-directory"
+
+# Runs on every interactive shell.
+cd ~/Projects/
+ncal -Cy
+date
+ep1
+
+# This account is reached over ssh and via `su`, and `su` does not run
+# pam_systemd, so those shells inherit neither XDG_RUNTIME_DIR nor
+# DBUS_SESSION_BUS_ADDRESS while /run/user/$UID/bus is a live session bus.
+# systemctl --user and notify-send fail with "Failed to connect to bus" until
+# these are set. Not shared config: a machine logged into through a display
+# manager gets both from PAM and needs none of this.
+if [ -z "${XDG_RUNTIME_DIR:-}" ] && [ -d "/run/user/$(id -u)" ]; then
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
+if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ] && [ -S "${XDG_RUNTIME_DIR:-/nonexistent}/bus" ]; then
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+fi

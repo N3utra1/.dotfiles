@@ -1,0 +1,4 @@
+! Font settings
+XTerm*faceName: FantasqueSansM Nerd Font Mono:style=Regular
+XTerm*faceSize: 12
+XTerm*renderFont: true

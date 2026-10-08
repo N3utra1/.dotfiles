@@ -5,7 +5,8 @@
 # The distribution owns ~/.bashrc and the login file, so they are never tracked
 # in this repository. Instead each one gets a single hook line appended that
 # sources the shared fragment under ~/.config/shell. Machine-specific settings
-# go straight into the untracked file, below the hook line.
+# go in the tracked ~/.config/shell/<hostname>.rc, which the shared fragment
+# sources; only secrets go into the untracked file.
 #
 # Safe to re-run: every edit is guarded by a check for the line it adds.
 
