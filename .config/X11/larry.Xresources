@@ -1,0 +1,41 @@
+! General settings
+XTerm*saveLines: 2000
+XTerm*termName: xterm-256color
+XTerm*customization: -color
+
+! Special colors
+XTerm*foreground: #4f424c
+XTerm*background: #e7e9db
+XTerm*cursorColor: #4f424c
+
+! Black
+XTerm*color0: #2f1e2e
+XTerm*color8: #776e71
+
+! Red
+XTerm*color1: #ef6155
+XTerm*color9: #ef6155
+
+! Green
+XTerm*color2: #48b685
+XTerm*color10: #48b685
+
+! Yellow
+XTerm*color3:  #945e00
+XTerm*color11: #b57614
+
+! Blue
+XTerm*color4: #06b6ef
+XTerm*color12: #06b6ef
+
+! Magenta
+XTerm*color5: #815ba4
+XTerm*color13: #815ba4
+
+! Cyan
+XTerm*color6: #5bc4bf
+XTerm*color14: #5bc4bf
+
+! White
+XTerm*color7:  #5a524c
+XTerm*color15: #3b3432
