@@ -22,6 +22,7 @@ alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 # newer build under ~/.local/bin takes precedence over a system package.
 if command -v nvim >/dev/null 2>&1; then
   alias vim="nvim"
+  alias bim="nvim"
   alias vvim="\vim"
 fi
 
@@ -51,7 +52,7 @@ alias l="ls -l"
 alias la="ls -la"
 alias ll="ls -la"
 
-alias bashrc="vim ~/.bashrc"
+alias bashrc="~/.bin/bashrc.sh"
 alias reload="source ~/.bashrc"
 alias vimrc="vim ~/.vimrc"
 alias bin="vim ~/.bin"
