@@ -13,6 +13,8 @@ alias ep1="source ~/.bin/ep1.sh && aws sts get-caller-identity"
 alias ep2="source ~/.bin/ep2.sh && aws sts get-caller-identity"
 alias dns="source ~/.bin/ep1.sh && source ~/.bin/list-public-dns.sh"
 
+alias chaaps="~/.bin/chaaps.sh"
+
 alias chaaps-war="ep2 && /bin/bash ~/.bin/start_chaaps_war.sh"
 alias chaaps-dev="chaaps-war"
 alias update-chaaps-war="/bin/bash ~/.bin/update_chaaps_war.sh"

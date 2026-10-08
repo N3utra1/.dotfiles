@@ -21,21 +21,25 @@ host=$(hostname -s)
 # opened in nvim with the working directory set to it, which is the way to
 # reach another machine's files under ~/.config/shell and ~/.config/X11.
 RC_FILES=(
+  ~/.bin
   ~/.bashrc
   ~/.profile
+  ~/.config/shell
   ~/.config/shell/rc
   ~/.config/shell/"$host".rc
   ~/.config/shell/profile
-  ~/.config/shell
-  ~/.xinitrc
+  ~/.config/X11
   ~/.config/X11/Xresources
   ~/.config/X11/"$host".Xresources
-  ~/.config/X11
+  ~/.config/i3/config
+  ~/.xinitrc
   ~/.tmux.conf
   ~/.config/nvim
-  ~/.config/i3/config
-  ~/.bin
 )
+
+# Paths given as arguments replace the list above, and MENU_TITLE replaces the
+# heading, so other menus can reuse this script; see ~/.bin/chaaps.sh.
+(($# > 0)) && RC_FILES=("$@")
 
 set -u
 
@@ -65,7 +69,7 @@ redraw=1
 trap 'redraw=1' WINCH
 
 tilde='~'
-title='Select a config file'
+title=${MENU_TITLE:-Select a config file}
 hint='up/down j/k: move   enter: open   q: quit'
 
 # Menu labels, and the box interior width: widest of label (plus room for the
@@ -75,7 +79,7 @@ inner=0
 for path in "${RC_FILES[@]}"; do
   label=${path/#$HOME/$tilde}
   if [[ -d $path ]]; then
-    label+='/'
+    label=${label%/}/
   elif [[ ! -e $path ]]; then
     label+=' (missing)'
   fi
