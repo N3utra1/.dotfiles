@@ -37,10 +37,6 @@ RC_FILES=(
   ~/.config/nvim
 )
 
-# Paths given as arguments replace the list above, and MENU_TITLE replaces the
-# heading, so other menus can reuse this script; see ~/.bin/chaaps.sh.
-(($# > 0)) && RC_FILES=("$@")
-
 set -u
 
 if [[ ! -t 0 || ! -t 1 ]]; then
@@ -69,7 +65,7 @@ redraw=1
 trap 'redraw=1' WINCH
 
 tilde='~'
-title=${MENU_TITLE:-Select a config file}
+title='Select a config file'
 hint='up/down j/k: move   enter: open   q: quit'
 
 # Menu labels, and the box interior width: widest of label (plus room for the
