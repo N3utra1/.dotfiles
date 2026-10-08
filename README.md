@@ -37,9 +37,9 @@ joined into `~/.config/i3/config`, which is generated and ignored. Edit
 generated file. A variable set in the host file (`set $term urxvt`) replaces the
 shared definition.
 
-The shared wallpaper is `~/.config/i3/wallpaper.png`. A machine with its own
-keeps it as `~/.config/i3/<hostname>.wallpaper.png` and sets it from its host
-file.
+Wallpapers are tracked in `~/.config/i3/wallpapers`, named for what they show,
+not for a machine. `config.base` sets the default; a machine that wants a
+different one sets it with its own `feh` line in its host file.
 
 `~/.Xresources` is not used. To set up a new machine, create its files and
 `config add` them; untracked files are hidden from `config status`, so a new

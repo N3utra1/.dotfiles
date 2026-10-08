@@ -38,11 +38,11 @@ exec_always --no-startup-id ~/.bin/load-xresources.sh
 # new version is the one in effect.
 exec_always --no-startup-id ~/.bin/i3-build-config.sh --restart
 
-# Wallpaper, tracked next to this file so every machine has it. exec_always so
-# it is set again after a restart. A machine with its own wallpaper keeps it as
-# ~/.config/i3/<hostname>.wallpaper.png and runs feh again from its host file;
-# the later one wins.
-exec_always --no-startup-id feh --no-fehbg --bg-scale ~/.config/i3/wallpaper.png
+# Default wallpaper. The images are tracked in ~/.config/i3/wallpapers so every
+# machine has all of them. exec_always so it is set again after a restart. A
+# machine that wants another one runs feh again from its host file, naming the
+# image it wants; the later one wins.
+exec_always --no-startup-id feh --no-fehbg --bg-scale ~/.config/i3/wallpapers/jungle.png
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
