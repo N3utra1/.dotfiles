@@ -29,8 +29,15 @@ override it. A machine with no file of its own gets the shared configuration.
 | -------------------------- | ------------------------------------ | --------- |
 | `~/.config/shell/rc`       | `~/.config/shell/<hostname>.rc`      | the end of `~/.config/shell/rc` |
 | `~/.config/X11/Xresources` | `~/.config/X11/<hostname>.Xresources` | `~/.bin/load-xresources.sh`, run by the i3 config |
+| `~/.config/i3/config.base` | `~/.config/i3/<hostname>.conf`        | `~/.bin/i3-build-config.sh`, which writes `~/.config/i3/config` |
 
-`~/.Xresources` is not used. To set up a new machine, create its two files and
+i3 has no way to read a second file before version 4.20, so its two files are
+joined into `~/.config/i3/config`, which is generated and ignored. Edit
+`config.base` or the host file and press `$mod+Shift+r`; never edit the
+generated file. A variable set in the host file (`set $term urxvt`) replaces the
+shared definition.
+
+`~/.Xresources` is not used. To set up a new machine, create its files and
 `config add` them; untracked files are hidden from `config status`, so a new
 host file is easy to forget.
 

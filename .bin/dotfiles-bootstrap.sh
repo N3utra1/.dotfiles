@@ -42,4 +42,11 @@ if ! grep -qxF "$PROFILE_HOOK" "$profile"; then
   echo "hooked $profile"
 fi
 
+# i3 loads ~/.config/i3/config, which is generated and not tracked, so build it
+# once here; after that the i3 config rebuilds it on every start.
+if [ -r "$HOME/.config/i3/config.base" ]; then
+  sh "$HOME/.bin/i3-build-config.sh"
+  echo "built ~/.config/i3/config"
+fi
+
 echo "bootstrap complete; open a new shell or run: source ~/.bashrc"

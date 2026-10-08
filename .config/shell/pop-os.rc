@@ -1,0 +1,124 @@
+# ~/.config/shell/pop-os.rc
+#
+# Interactive shell configuration for the host "pop-os" only (ThinkPad laptop,
+# Pop!_OS, i3 on a local X session). Sourced at the end of ~/.config/shell/rc
+# when `hostname -s` is pop-os, so anything here overrides the shared settings.
+#
+# Tracked so it is readable from every machine, which means no secrets.
+# oh-my-bash is set up in the untracked ~/.bashrc, above the hook line.
+
+export EDITOR=vim
+export PATH="$HOME/.bin:$PATH"
+
+# Hand-installed tools (a current nvim among them) live in ~/.local/bin and
+# must come before the distribution's older copies. ~/.profile adds it for
+# login shells only, and a terminal opened from i3 is not one.
+case ":$PATH:" in
+*":$HOME/.local/bin:"*) ;;
+*) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+
+export JAVA_HOME=""
+
+# ------------------------------------------------------------ packages --
+export UPDATE="sudo apt-get update -y"
+export UPGRADE="sudo apt-get upgrade"
+export SEARCH="sudo apt-cache search"
+export INSTALL="sudo apt-get install"
+export CLEAN="sudo apt autoremove && sudo apt clean"
+
+# Quoted: unquoted, `alias update=$UPDATE` defines update as just "sudo".
+alias update="$UPDATE"
+alias upgrade="$UPGRADE"
+alias search="$SEARCH"
+alias install="$INSTALL"
+alias clean="$CLEAN"
+
+# --------------------------------------------------------------- power --
+# poweroffScript.sh pushes the university files before shutting down.
+alias poweroff='~/.bin/poweroffScript.sh'
+alias suspend='systemctl suspend'
+
+# ------------------------------------------------------------- general --
+alias bt='bluetoothctl'
+alias headphones='bluetoothctl connect AC:80:0A:59:09:88'
+alias rd='ranger'
+alias clea='clear'
+alias cl='clear'
+alias d='urxvt &'
+alias rollback='git reset --hard HEAD'
+alias python="python3"
+
+# ------------------------------------------------------------ movement --
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+alias 6013='cd ~/Documents/University/COMP6013'
+alias 6018='cd ~/Documents/University/COMP6018'
+alias 6015='cd ~/Documents/University/COMP6015'
+alias 6031='cd ~/Documents/University/COMP6031'
+
+alias projects='cd ~/Documents/Projects'
+alias scratch='cd ~/Documents/Scratch'
+alias uni='cd ~/Documents/University'
+# Overrides the shared `bin`, which opens the directory in the editor.
+alias bin='cd ~/.bin'
+
+# ------------------------------------------------------- config files --
+alias i3conf='vim ~/.config/i3/pop-os.conf'
+alias x='vim ~/.config/X11/pop-os.Xresources'
+# Reload X resources after editing them; only new terminals pick them up.
+alias restartX='~/.bin/load-xresources.sh'
+alias doom='~/.emacs.d/bin/doom'
+
+# Unpack an archive according to its extension.
+function extract {
+  if [ -z "$1" ]; then
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+  elif [ -f "$1" ]; then
+    case $1 in
+    *.tar.bz2) tar xvjf ./"$1" ;;
+    *.tar.gz) tar xvzf ./"$1" ;;
+    *.tar.xz) tar xvJf ./"$1" ;;
+    *.lzma) unlzma ./"$1" ;;
+    *.bz2) bunzip2 ./"$1" ;;
+    *.rar) unrar x -ad ./"$1" ;;
+    *.gz) gunzip ./"$1" ;;
+    *.tar) tar xvf ./"$1" ;;
+    *.tbz2) tar xvjf ./"$1" ;;
+    *.tgz) tar xvzf ./"$1" ;;
+    *.zip) unzip ./"$1" ;;
+    *.Z) uncompress ./"$1" ;;
+    *.7z) 7z x ./"$1" ;;
+    *.xz) unxz ./"$1" ;;
+    *.exe) cabextract ./"$1" ;;
+    *) echo "extract: '$1' - unknown archive method" ;;
+    esac
+  else
+    echo "$1 - file does not exist"
+  fi
+}
+
+# ------------------------------------------------------------- scripts --
+alias print='print.sh'
+alias list='list.sh'
+# Monitor layouts saved from arandr.
+alias docked='~/.screenlayout/docked.sh'
+alias undocked='~/.screenlayout/undocked.sh'
+
+alias topdf='soffice --headless --convert-to pdf'
+alias pyLocalServer='python3 -m http.server'
+alias http='browser-sync start --server -f -w'
+
+# ----------------------------------------------------------------- ssh --
+export phi="192.168.0.128"
+alias phi='ssh phi@192.168.0.128'
+alias figma='ssh figma@figma'
+
+[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# Runs on every interactive shell.
+cal
+date

@@ -19,7 +19,8 @@ host=$(hostname -s)
 
 # Add or remove entries here; the menu is built from this list. A directory is
 # opened in nvim with the working directory set to it, which is the way to
-# reach another machine's files under ~/.config/shell and ~/.config/X11.
+# reach another machine's files under ~/.config/shell, ~/.config/X11 and
+# ~/.config/i3.
 RC_FILES=(
   ~/.bin
   ~/.bashrc
@@ -31,7 +32,9 @@ RC_FILES=(
   ~/.config/X11
   ~/.config/X11/Xresources
   ~/.config/X11/"$host".Xresources
-  ~/.config/i3/config
+  ~/.config/i3
+  ~/.config/i3/config.base
+  ~/.config/i3/"$host".conf
   ~/.xinitrc
   ~/.tmux.conf
   ~/.config/nvim
